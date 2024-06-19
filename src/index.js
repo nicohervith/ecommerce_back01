@@ -15,6 +15,7 @@ app.use(express.json());
 
 app.use("/api/checkout", require("./routes/checkout.routes"));
 app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/products", require("./routes/product.routes"));
 
 app.post("/api/checkout", async (req, res) => {
   console.log(req.body);
