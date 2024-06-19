@@ -3,10 +3,9 @@ const Stripe = require("stripe");
 const morgan = require("morgan");
 const cors = require("cors");
 const { mongoose } = require("./database");
+require("dotenv").config();
 
-const stripe = new Stripe(
-  "sk_test_51LAIJWIlL7CBuxtZLw6cfpiSgnSFZr6mAcf3enu3d68WecgUflMaJQIC9z0rtNyon4EAFsfhkNtM8EcQS758pg6a00G3apDEpv"
-);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 
