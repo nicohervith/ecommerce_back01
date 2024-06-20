@@ -4,7 +4,7 @@ const router = express.Router();
 const Product = require("../models/products.model");
 // Ruta para crear un producto
 router.post("/create", async (req, res) => {
-  const { image, name, description, price, tags ,productType } = req.body;
+  const { image, name, description, price, tags, productType } = req.body;
 
   const newProduct = new Product({
     image,
@@ -30,6 +30,29 @@ router.get("/", async (req, res) => {
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener productos", error });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  const productId = req.params.id;
+  const { image, name, productType, description, price, tags } = req.body;
+
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      { image, name, productType, description, price, tags },
+      { new: true } // Devuelve el documento actualizado
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error al actualizar el producto", error });
   }
 });
 
