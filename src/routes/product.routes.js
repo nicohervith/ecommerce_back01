@@ -2,7 +2,11 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/products.model");
-// Ruta para crear un producto
+const {
+  deleteProduct,
+  updateProduct,
+} = require("../controllers/product.controller");
+
 router.post("/create", async (req, res) => {
   const { image, name, description, price, tags, productType } = req.body;
 
@@ -23,7 +27,6 @@ router.post("/create", async (req, res) => {
   }
 });
 
-// Ruta para obtener todos los productos
 router.get("/", async (req, res) => {
   try {
     const products = await Product.find();
@@ -33,54 +36,23 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
-  const productId = req.params.id;
-  const { image, name, productType, description, price, tags } = req.body;
+router.get("/:productId", async (req, res) => {
+  const productId = req.params.productId;
 
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productId,
-      { image, name, productType, description, price, tags },
-      { new: true } // Devuelve el documento actualizado
-    );
-
-    if (!updatedProduct) {
+    const product = await Product.findById(productId);
+    if (!product) {
       return res.status(404).json({ message: "Producto no encontrado" });
     }
-
-    return res.status(200).json(updatedProduct);
+    res.json(product);
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error al actualizar el producto", error });
+    console.error("Error al obtener el producto:", error);
+    res.status(500).json({ message: "Error al obtener el producto", error });
   }
 });
+
+router.delete("/:id", deleteProduct);
+
+router.put("/:id", updateProduct);
 
 module.exports = router;
-
-// routes/product.routes.js
-/* const express = require('express');
-const router = express.Router();
-const Product = require('../models/catalog.model');
-const { authenticateToken, authorizeRole } = require('../middleware/auth');
-
-router.post('/create', authenticateToken, authorizeRole('admin'), async (req, res) => {
-  const { imgUrl, name, description, price, tags } = req.body;
-
-  const newProduct = new Product({
-    imgUrl,
-    name,
-    description,
-    price,
-    tags,
-  });
-
-  try {
-    const savedProduct = await newProduct.save();
-    res.status(201).json(savedProduct);
-  } catch (error) {
-    res.status(500).json({ message: 'Error al crear el producto', error });
-  }
-});
-
-module.exports = router; */
