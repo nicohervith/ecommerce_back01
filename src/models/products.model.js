@@ -12,6 +12,9 @@ const productsSchema = new mongoose.Schema(
     productType: {
       type: String,
     },
+    rating: {
+      type: Number,
+    },
     description: {
       type: String,
     },
@@ -22,6 +25,7 @@ const productsSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    inStock: { type: Number, required: true, default: 1 },
   },
   {
     timestamps: true,

@@ -8,15 +8,18 @@ const {
 } = require("../controllers/product.controller");
 
 router.post("/create", async (req, res) => {
-  const { image, name, description, price, tags, productType } = req.body;
+  const { image, name, productType, rating, description, price, tags } =
+    req.body;
 
   const newProduct = new Product({
     image,
     name,
     productType,
+    rating,
     description,
     price,
     tags,
+    inStock: inStock || 1,
   });
 
   try {
